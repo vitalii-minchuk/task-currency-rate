@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { TitleStrategy } from '@angular/router';
 import { CurrencyRateService } from './currency-rate.service';
 
 @Component({
@@ -25,14 +24,41 @@ export class CurrencyRateComponent implements OnInit {
   }
 
   handleChangeInput1() {
+    if (this.value1 && this.value1 <= 0) {
+      this.value2 = this.value1 = 0;
+    }
     if (this.currentRate && this.value1) {
       this.value2 = this.currentRate * this.value1;
     }
   }
 
   handleChangeInput2() {
+    if (this.value2 && this.value2 <= 0) {
+      this.value1 = this.value2 = 0;
+    }
     if (this.currentRate && this.value2) {
       this.value1 = this.value2 / this.currentRate;
     }
+  }
+
+  onChangeCurrency1() {
+    this.currencyRate.getRate(this.cur1, this.cur2).subscribe((response) => {
+      const rate: number = Object.entries(response)[1][1];
+      this.currentRate = rate;
+      if (this.value1) {
+        this.value2 = this.value1 * rate;
+      }
+      console.log(this.value2);
+    });
+  }
+
+  onChangeCurrency2() {
+    this.currencyRate.getRate(this.cur1, this.cur2).subscribe((response) => {
+      const rate: number = Object.entries(response)[1][1];
+      this.currentRate = rate;
+      if (this.value2) {
+        this.value1 = this.value2 / this.currentRate;
+      }
+    });
   }
 }
