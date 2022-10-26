@@ -1,20 +1,4 @@
-<div class="flex gap-2">
-    <div>
-        <input (change)="handleChangeInput1()" [(ngModel)]="value1" type="number" class="px-1 w-24 bg-transparent outline-none border border-white rounded-sm"/>
-        <select (change)="onChangeCurrency1()" [(ngModel)]="cur1" class="bg-transparent outline-none cursor-pointer">
-            <option value="usd">USD</option>
-            <option value="uah">UAH</option>
-            <option value="eur">EUR</option>
-            <option value="pln">PLN</option>
-        </select>
-    </div>
-    <div>
-        <input (change)="handleChangeInput2()" [(ngModel)]="value2" type="number" class="px-1 w-24 bg-transparent outline-none border border-white rounded-sm"/>
-        <select (change)="onChangeCurrency2()" [(ngModel)]="cur2" class="bg-transparent outline-none cursor-pointer">
-            <option value="uah">UAH</option>
-            <option value="usd">USD</option>
-            <option value="eur">EUR</option>
-            <option value="pln">PLN</option>
-        </select>
-    </div>
+<div class="flex gap-3">
+    <app-covert-from></app-covert-from>
+    <app-covert-to></app-covert-to>
 </div>

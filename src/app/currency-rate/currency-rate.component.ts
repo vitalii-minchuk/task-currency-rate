@@ -6,8 +6,8 @@ import { CurrencyRateService } from './currency-rate.service';
   templateUrl: './currency-rate.component.html',
 })
 export class CurrencyRateComponent implements OnInit {
-  public cur1 = 'usd';
-  public cur2 = 'uah';
+  public covertFromCurrency = 'usd';
+  public covertToCurrency = 'uah';
   public value1: number | null = null;
   public value2: number | null = null;
   private currentRate: number | null = null;
@@ -15,12 +15,15 @@ export class CurrencyRateComponent implements OnInit {
   constructor(private currencyRate: CurrencyRateService) {}
 
   ngOnInit(): void {
-    this.currencyRate.getRate(this.cur1, this.cur2).subscribe((response) => {
-      const rate: number = Object.entries(response)[1][1].toFixed(2);
-      this.currentRate = rate;
-      this.value1 = 1;
-      this.value2 = this.currentRate;
-    });
+    this.currencyRate
+      .getRate(this.covertFromCurrency, this.covertToCurrency)
+      .subscribe((response) => {
+        const rate: number = Object.entries(response)[1][1].toFixed(2);
+        this.currentRate = rate;
+        this.value1 = 1;
+        this.value2 = this.currentRate;
+        console.log(rate);
+      });
   }
 
   handleChangeInput1() {
@@ -41,24 +44,24 @@ export class CurrencyRateComponent implements OnInit {
     }
   }
 
-  onChangeCurrency1() {
-    this.currencyRate.getRate(this.cur1, this.cur2).subscribe((response) => {
-      const rate: number = Object.entries(response)[1][1];
-      this.currentRate = rate;
-      if (this.value1) {
-        this.value2 = this.value1 * rate;
-      }
-      console.log(this.value2);
-    });
-  }
+  // onChangeCurrency1() {
+  //   this.currencyRate.getRate(this.cur1, this.cur2).subscribe((response) => {
+  //     const rate: number = Object.entries(response)[1][1];
+  //     this.currentRate = rate;
+  //     if (this.value1) {
+  //       this.value2 = this.value1 * rate;
+  //     }
+  //     console.log(this.value2);
+  //   });
+  // }
 
-  onChangeCurrency2() {
-    this.currencyRate.getRate(this.cur1, this.cur2).subscribe((response) => {
-      const rate: number = Object.entries(response)[1][1];
-      this.currentRate = rate;
-      if (this.value2) {
-        this.value1 = this.value2 / this.currentRate;
-      }
-    });
-  }
+  // onChangeCurrency2() {
+  //   this.currencyRate.getRate(this.cur1, this.cur2).subscribe((response) => {
+  //     const rate: number = Object.entries(response)[1][1];
+  //     this.currentRate = rate;
+  //     if (this.value2) {
+  //       this.value1 = this.value2 / this.currentRate;
+  //     }
+  //   });
+  // }
 }

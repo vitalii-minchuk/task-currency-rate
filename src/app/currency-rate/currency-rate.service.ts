@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root',
 })
 export class CurrencyRateService {
-  private baseUrl: string =
+  private readonly baseUrl: string =
     'https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/';
 
   constructor(private http: HttpClient) {}
