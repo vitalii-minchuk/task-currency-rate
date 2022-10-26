@@ -1,30 +1,29 @@
-import { Component, OnInit } from '@angular/core';
-
-enum Currencies {
-  'usd' = 'usd',
-  'uah' = 'uah',
-  'pln' = 'pln',
-  'eur' = 'eur',
-}
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Currencies } from '../currency-types';
 
 @Component({
   selector: 'app-currency-select',
   templateUrl: './currency-select.component.html',
 })
 export class CurrencySelectComponent implements OnInit {
+  @Output() outCurrency = new EventEmitter<keyof typeof Currencies>();
+  @Input() selectedByDefault: keyof typeof Currencies;
+
   public currencyOptions: Array<keyof typeof Currencies> = [
     'uah',
     'eur',
     'usd',
     'pln',
   ];
-  public selectedCurrency = Currencies.usd;
+  public selectedCurrency: keyof typeof Currencies;
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.selectedCurrency = this.selectedByDefault;
+  }
 
   onCurrencyChange() {
-    console.log(this.selectedCurrency);
+    this.outCurrency.emit(this.selectedCurrency);
   }
 }

@@ -1,0 +1,9 @@
+<div class="flex gap-2">
+    <input
+        (change)="getAmount($event)"
+        [value]="currencyAmountFrom"
+        type="number"
+        class="px-1 w-24 bg-transparent border rounded-sm"
+    />
+    <app-currency-select (outCurrency)="getCurrency($event)" [selectedByDefault]="covertFromCurrency"></app-currency-select>
+</div>

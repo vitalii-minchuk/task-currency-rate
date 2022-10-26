@@ -1,3 +1,9 @@
-<select (change)="onCurrencyChange()" [(ngModel)]="selectedCurrency" class="bg-transparent outline-none cursor-pointer">
-    <option *ngFor="let currency of currencyOptions" [value]="currency">{{ currency | uppercase}}</option>
+<select
+    (change)="onCurrencyChange()"
+    [(ngModel)]="selectedCurrency"
+    class="bg-transparent cursor-pointer"
+>
+    <option *ngFor="let currency of currencyOptions" [value]="currency">
+        {{ currency | uppercase}}
+    </option>
 </select>

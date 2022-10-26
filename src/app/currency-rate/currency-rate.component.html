@@ -1,4 +1,14 @@
-<div class="flex gap-3">
-    <app-covert-from></app-covert-from>
-    <app-covert-to></app-covert-to>
+<div class="flex gap-4">
+    <app-convert-from
+        (outCurrencyAmount)="onChangeAmount($event)"
+        [currencyAmountFrom]="currencyAmountFrom"
+        (outConvertCurrency)="onChangeCurrency($event)"
+        [covertFromCurrency]="covertFromCurrency"
+    ></app-convert-from>
+    <app-convert-to
+        (outCurrencyAmount)="onChangeAmount($event)"
+        [currencyAmountTo]="currencyAmountTo"
+        (outConvertCurrency)="onChangeCurrency($event)"
+        [covertToCurrency]="covertToCurrency"
+    ></app-convert-to>
 </div>

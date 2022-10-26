@@ -1,16 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { CurrencyRateService } from './currency-rate.service';
+import {
+  ChangeAmountEvent,
+  ChangeCurrencyEvent,
+  Currencies,
+} from './currency-types';
 
 @Component({
   selector: 'app-currency-rate',
   templateUrl: './currency-rate.component.html',
 })
 export class CurrencyRateComponent implements OnInit {
-  public covertFromCurrency = 'usd';
-  public covertToCurrency = 'uah';
-  public value1: number | null = null;
-  public value2: number | null = null;
-  private currentRate: number | null = null;
+  public covertFromCurrency: keyof typeof Currencies = Currencies.usd;
+  public covertToCurrency: keyof typeof Currencies = Currencies.uah;
+  public currencyAmountFrom: number;
+  public currencyAmountTo: number;
+  private currentRate: number;
 
   constructor(private currencyRate: CurrencyRateService) {}
 
@@ -20,48 +25,39 @@ export class CurrencyRateComponent implements OnInit {
       .subscribe((response) => {
         const rate: number = Object.entries(response)[1][1].toFixed(2);
         this.currentRate = rate;
-        this.value1 = 1;
-        this.value2 = this.currentRate;
-        console.log(rate);
+        this.currencyAmountFrom = 1;
+        this.currencyAmountTo = this.currentRate;
       });
   }
 
-  handleChangeInput1() {
-    if (this.value1 && this.value1 <= 0) {
-      this.value2 = this.value1 = 0;
+  onChangeAmount(event: ChangeAmountEvent) {
+    if (event.amount <= 0) {
+      this.currencyAmountFrom = this.currencyAmountTo = 0;
+      return;
     }
-    if (this.currentRate && this.value1) {
-      this.value2 = this.currentRate * this.value1;
+    if (event.convertType === 'to') {
+      this.currencyAmountTo = event.amount;
+      this.currencyAmountFrom = event.amount / this.currentRate;
     }
-  }
-
-  handleChangeInput2() {
-    if (this.value2 && this.value2 <= 0) {
-      this.value1 = this.value2 = 0;
-    }
-    if (this.currentRate && this.value2) {
-      this.value1 = this.value2 / this.currentRate;
+    if (event.convertType === 'from') {
+      this.currencyAmountFrom = event.amount;
+      this.currencyAmountTo = this.currentRate * event.amount;
     }
   }
 
-  // onChangeCurrency1() {
-  //   this.currencyRate.getRate(this.cur1, this.cur2).subscribe((response) => {
-  //     const rate: number = Object.entries(response)[1][1];
-  //     this.currentRate = rate;
-  //     if (this.value1) {
-  //       this.value2 = this.value1 * rate;
-  //     }
-  //     console.log(this.value2);
-  //   });
-  // }
-
-  // onChangeCurrency2() {
-  //   this.currencyRate.getRate(this.cur1, this.cur2).subscribe((response) => {
-  //     const rate: number = Object.entries(response)[1][1];
-  //     this.currentRate = rate;
-  //     if (this.value2) {
-  //       this.value1 = this.value2 / this.currentRate;
-  //     }
-  //   });
-  // }
+  onChangeCurrency(event: ChangeCurrencyEvent) {
+    if (event.convertType === 'from') {
+      this.covertFromCurrency = event.currency;
+    }
+    if (event.convertType === 'to') {
+      this.covertToCurrency = event.currency;
+    }
+    this.currencyRate
+      .getRate(this.covertFromCurrency, this.covertToCurrency)
+      .subscribe((response) => {
+        const rate: number = Object.entries(response)[1][1];
+        this.currentRate = rate;
+        this.currencyAmountTo = this.currencyAmountFrom * rate;
+      });
+  }
 }
